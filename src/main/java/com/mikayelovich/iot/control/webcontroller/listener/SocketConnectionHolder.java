@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class SocketConnectionHolder {
-    private final Map<UUID, SocketBasedStringCommandPublisher> map = new HashMap<>();
+    private final Map<String, SocketBasedStringCommandPublisher> map = new HashMap<>();
 
     public List<SocketBasedStringCommandPublisher> getAllActiveConnections() {
         return map.values().stream()
@@ -22,14 +22,16 @@ public class SocketConnectionHolder {
     }
 
 
-    public UUID addConnection(Socket socket) {
+    public String addConnection(Socket socket) {
         SocketBasedStringCommandPublisher publisher = new SocketBasedStringCommandPublisher(socket);
-        UUID deviceUniqueId = publisher.getDeviceUniqueId();
+        String deviceUniqueId = publisher.getDeviceMacAddress();
         map.put(deviceUniqueId, publisher);
         return deviceUniqueId;
     }
 
-    public Optional<SocketBasedStringCommandPublisher> getById(UUID uuid) {
-        return Optional.ofNullable(map.get(uuid));
+    public Optional<SocketBasedStringCommandPublisher> getByMacId(String id) {
+        return Optional.ofNullable(map.get(id));
     }
+
+    //TODO link pseudonym to mac address, for easier recognition
 }
