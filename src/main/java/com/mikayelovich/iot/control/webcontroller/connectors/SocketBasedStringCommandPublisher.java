@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.UUID;
 
 @Slf4j
 public class SocketBasedStringCommandPublisher implements CommandPublisher<String> {
@@ -27,30 +24,31 @@ public class SocketBasedStringCommandPublisher implements CommandPublisher<Strin
         try {
             printToSocketWriter = new PrintWriter(socket.getOutputStream(), true);
             this.deviceMacAddress = InetUtil.getMacAddress(socket.getInetAddress());
+            log.info("SocketBasedStringCommandPublisher initialized for device with MAC address: {}", deviceMacAddress);
         } catch (IOException exception) {
-            log.error(exception.getMessage(), Arrays.toString(exception.getStackTrace()));
+            log.error("Error initializing SocketBasedStringCommandPublisher", exception);
             throw new SocketStreamInitializationException(exception.getMessage());
         }
     }
-
 
     public void sendCommand(Command<String> command) {
         if (!isActive) {
             throw new SocketClosedException();
         }
         String commandStr = command.mapToExecutable();
+        log.debug("Sending command '{}' to device with MAC address: {}", commandStr, deviceMacAddress);
         printToSocketWriter.println(commandStr);
     }
-
 
     @Override
     public void close() {
         try {
             printToSocketWriter.close();
             socket.close();
-            isActive = true;
+            isActive = false;
+            log.info("SocketBasedStringCommandPublisher closed for device with MAC address: {}", deviceMacAddress);
         } catch (IOException e) {
-            log.error(e.getMessage(), Arrays.toString(e.getStackTrace()));
+            log.error("Error closing SocketBasedStringCommandPublisher", e);
         }
     }
 }

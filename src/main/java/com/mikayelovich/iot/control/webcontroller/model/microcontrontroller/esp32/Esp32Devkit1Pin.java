@@ -52,5 +52,19 @@ public enum Esp32Devkit1Pin {
         OUTPUT_ONLY,
         INPUT_OUTPUT
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(pinNumber);
+    }
+
+    public static Esp32Devkit1Pin fromPinNumber(int pinNumber) {
+        for (Esp32Devkit1Pin value : Esp32Devkit1Pin.values()) {
+            if (value.pinNumber == pinNumber) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("no pin with number: " + pinNumber);
+    }
 }
 
