@@ -3,235 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>IOT Master Server Control</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        select, input {
-            width: 200px;
-            padding: 5px;
-            margin-bottom: 10px;
-        }
-        button {
-            padding: 5px 10px;
-            margin-top: 10px;
-        }
-        .command-section {
-            margin-bottom: 30px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 20px;
-        }
-    </style>
+
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+
+    <script th:src="@{/js/main.js}" type="text/javascript"></script>
+
 </head>
 <body>
-<h1>IOT Master Server Control</h1>
+<div style="width: 100%; display: flex; flex-direction: row;">
+    <div style="width: 50%" >
+        <h1>IOT Master Server Control</h1>
 
-<div class="command-section">
-    <h2>Pin Mode Command</h2>
-    <label for="devices-pin-mode">Select Device:</label>
-    <select id="devices-pin-mode" name="devices-pin-mode"></select>
+        <div class="command-section">
+            <h2>Pin Mode Command</h2>
+            <label for="devices-pin-mode">Select Device:</label>
+            <select id="devices-pin-mode" name="devices-pin-mode"></select>
 
-    <label for="pinNumber-pin-mode">Select Pin Number:</label>
-    <select id="pinNumber-pin-mode" name="pinNumber-pin-mode"></select>
+            <label for="pinNumber-pin-mode">Select Pin Number:</label>
+            <select id="pinNumber-pin-mode" name="pinNumber-pin-mode"></select>
 
-    <label for="pinModeState-pin-mode">Select Pin Mode State:</label>
-    <select id="pinModeState-pin-mode" name="pinModeState-pin-mode">
-        <option value="INPUT_PULLUP">INPUT_PULLUP</option>
-        <option value="INPUT">INPUT</option>
-        <option value="OUTPUT">OUTPUT</option>
-    </select>
+            <label for="pinModeState-pin-mode">Select Pin Mode State:</label>
+            <select id="pinModeState-pin-mode" name="pinModeState-pin-mode">
+                <option value="INPUT_PULLUP">INPUT_PULLUP</option>
+                <option value="INPUT">INPUT</option>
+                <option value="OUTPUT">OUTPUT</option>
+            </select>
 
-    <button onclick="sendPinModeCommand()">Pin Mode Command</button>
+            <button onclick="sendPinModeCommand()">Pin Mode Command</button>
+        </div>
+
+        <div class="command-section">
+            <h2>Digital Write Command</h2>
+            <label for="devices-digital-write">Select Device:</label>
+            <select id="devices-digital-write" name="devices-digital-write"></select>
+
+            <label for="pinNumber-digital-write">Select Pin Number:</label>
+            <select id="pinNumber-digital-write" name="pinNumber-digital-write"></select>
+
+            <label for="state-digital-write">Select State:</label>
+            <select id="state-digital-write" name="state-digital-write">
+                <option value="HIGH">HIGH</option>
+                <option value="LOW">LOW</option>
+            </select>
+
+            <button onclick="sendDigitalWriteCommand()">Digital Write Command</button>
+        </div>
+
+        <div class="command-section">
+            <h2>Enable Pin for Duration</h2>
+            <label for="devices-enable-pin">Select Device:</label>
+            <select id="devices-enable-pin" name="devices-enable-pin"></select>
+
+            <label for="pinNumber-enable-pin">Select Pin Number:</label>
+            <select id="pinNumber-enable-pin" name="pinNumber-enable-pin"></select>
+
+            <label for="duration-enable-pin">Duration in Seconds:</label>
+            <input type="number" id="duration-enable-pin" name="duration-enable-pin" min="1" max="3600">
+
+            <button onclick="sendEnablePinForDuration()">Enable Pin for Duration</button>
+        </div>
+
+        <div class="command-section">
+            <h2>Restart device</h2>
+            <label for="devices-restart-device">Select Device:</label>
+            <select id="devices-restart-device" name="devices-restart-device"></select>
+
+            <button onclick="sendRestartDevice()">Restart Device</button>
+        </div>
+    </div >
+    <div style="width: 50%" >
+        <h2>Device Pin Info</h2>
+        <button onclick="fetchDevicePinInfo()">Get Pin Info</button>
+        <table id="pinInfoTable">
+            <thead>
+            <tr>
+                <th>Device MAC Address</th>
+                <th>Pin States</th>
+            </tr>
+            </thead>
+            <tbody id="pinInfoBody"></tbody>
+        </table>
+    </div>
 </div>
-
-<div class="command-section">
-    <h2>Enable Pin for Duration</h2>
-    <label for="devices-enable-pin">Select Device:</label>
-    <select id="devices-enable-pin" name="devices-enable-pin"></select>
-
-    <label for="pinNumber-enable-pin">Select Pin Number:</label>
-    <select id="pinNumber-enable-pin" name="pinNumber-enable-pin"></select>
-
-    <label for="duration-enable-pin">Duration in Seconds:</label>
-    <input type="number" id="duration-enable-pin" name="duration-enable-pin" min="1" max="3600">
-
-    <button onclick="sendEnablePinForDuration()">Enable Pin for Duration</button>
-</div>
-
-<div class="command-section">
-    <h2>Digital Write Command</h2>
-    <label for="devices-digital-write">Select Device:</label>
-    <select id="devices-digital-write" name="devices-digital-write"></select>
-
-    <label for="pinNumber-digital-write">Select Pin Number:</label>
-    <select id="pinNumber-digital-write" name="pinNumber-digital-write"></select>
-
-    <label for="state-digital-write">Select State:</label>
-    <select id="state-digital-write" name="state-digital-write">
-        <option value="LOW">LOW</option>
-        <option value="HIGH">HIGH</option>
-    </select>
-
-    <button onclick="sendDigitalWriteCommand()">Digital Write Command</button>
-</div>
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchDevices('devices-pin-mode');
-        fetchDevices('devices-enable-pin');
-        fetchDevices('devices-digital-write');
-        populatePinNumbers('pinNumber-pin-mode');
-        populatePinNumbers('pinNumber-enable-pin');
-        populatePinNumbers('pinNumber-digital-write');
-    });
-
-    async function fetchDevices(dropdownId) {
-        try {
-            const response = await fetch('http://localhost:8080/devices');
-            const devices = await response.json();
-            const devicesDropdown = document.getElementById(dropdownId);
-
-            devices.forEach(device => {
-                const option = document.createElement('option');
-                option.value = device;
-                option.text = device;
-                devicesDropdown.add(option);
-            });
-            console.log('Devices fetched successfully:', devices);
-        } catch (error) {
-            console.error('Error fetching devices:', error);
-        }
-    }
-
-    function populatePinNumbers(dropdownId) {
-        const pinNumbers = Array.from({length: 40}, (_, i) => i); // 0 to 39
-        const pinNumberDropdown = document.getElementById(dropdownId);
-
-        pinNumbers.forEach(pin => {
-            const option = document.createElement('option');
-            option.value = pin;
-            option.text = pin;
-            pinNumberDropdown.add(option);
-        });
-        console.log('Pin numbers populated for dropdown:', dropdownId);
-    }
-
-    async function sendPinModeCommand() {
-        const macAddress = document.getElementById('devices-pin-mode').value;
-        const pinNumber = document.getElementById('pinNumber-pin-mode').value;
-        const pinModeState = document.getElementById('pinModeState-pin-mode').value;
-        console.log('Sending Pin Mode Command:');
-        console.log('Mac Address:', macAddress);
-        console.log('Pin Number:', pinNumber);
-        console.log('Pin Mode State:', pinModeState);
-
-        const data = {
-            macAddress: macAddress,
-            pinNumber: parseInt(pinNumber),
-            pinModeState: pinModeState
-        };
-        console.log('Data to send:', JSON.stringify(data));
-        try {
-            const response = await fetch('http://localhost:8080/execute/pin-mode/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('Command executed successfully.');
-            } else {
-                alert(`Error executing command. ${ await convertReadableStreamToString(response.body)}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    async function sendEnablePinForDuration() {
-        const macAddress = document.getElementById('devices-enable-pin').value;
-        const pinNumber = document.getElementById('pinNumber-enable-pin').value;
-        const duration = document.getElementById('duration-enable-pin').value;
-
-        const data = {
-            macAddress: macAddress,
-            pinNumber: parseInt(pinNumber),
-            durationInSeconds: parseInt(duration)
-        };
-
-        try {
-            const response = await fetch('http://localhost:8080/execute/enable-pin-for-duration/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('Command executed successfully.');
-            } else {
-                alert(`Error executing command. ${ await convertReadableStreamToString(response.body)}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    async function sendDigitalWriteCommand() {
-        const macAddress = document.getElementById('devices-digital-write').value;
-        const pinNumber = document.getElementById('pinNumber-digital-write').value;
-        const state = document.getElementById('state-digital-write').value;
-
-        const data = {
-            macAddress: macAddress,
-            pinNumber: parseInt(pinNumber),
-            state: state
-        };
-
-        try {
-            const response = await fetch('http://localhost:8080/execute/digital-write/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('Command executed successfully.');
-            } else {
-                alert(`Error executing command. ${ await convertReadableStreamToString(response.body)}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    async function convertReadableStreamToString(readableStream) {
-        const reader = readableStream.getReader();
-        const decoder = new TextDecoder();
-        let result = '';
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-                break;
-            }
-            result += decoder.decode(value, { stream: true });
-        }
-        return result;
-    }
-
-    /*]]>*/
-</script>
 
 </body>
 </html>

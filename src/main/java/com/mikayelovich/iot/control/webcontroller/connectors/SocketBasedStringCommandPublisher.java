@@ -2,6 +2,8 @@ package com.mikayelovich.iot.control.webcontroller.connectors;
 
 import com.mikayelovich.iot.control.webcontroller.exceptions.SocketClosedException;
 import com.mikayelovich.iot.control.webcontroller.exceptions.SocketStreamInitializationException;
+import com.mikayelovich.iot.control.webcontroller.model.commands.PinModeCommand;
+import com.mikayelovich.iot.control.webcontroller.model.commands.RestartCommand;
 import com.mikayelovich.iot.control.webcontroller.model.commands.abstraction.Command;
 import com.mikayelovich.iot.control.webcontroller.util.InetUtil;
 import lombok.Getter;
@@ -18,9 +20,11 @@ public class SocketBasedStringCommandPublisher implements CommandPublisher<Strin
     private final Socket socket;
     private final PrintWriter printToSocketWriter;
     private @Getter boolean isActive = true;
+    private final DevicePinStateHolder devicePinStateHolder;
 
-    public SocketBasedStringCommandPublisher(Socket socket) {
+    public SocketBasedStringCommandPublisher(Socket socket, DevicePinStateHolder devicePinStateHolder) {
         this.socket = socket;
+        this.devicePinStateHolder = devicePinStateHolder;
         try {
             printToSocketWriter = new PrintWriter(socket.getOutputStream(), true);
             this.deviceMacAddress = InetUtil.getMacAddress(socket.getInetAddress());
@@ -38,6 +42,11 @@ public class SocketBasedStringCommandPublisher implements CommandPublisher<Strin
         String commandStr = command.mapToExecutable();
         log.debug("Sending command '{}' to device with MAC address: {}", commandStr, deviceMacAddress);
         printToSocketWriter.println(commandStr);
+        if (command instanceof PinModeCommand) {
+            devicePinStateHolder.put(deviceMacAddress, ((PinModeCommand) command));
+        } else if (command instanceof RestartCommand) {
+            devicePinStateHolder.removeAllForDevice(deviceMacAddress);
+        }
     }
 
     @Override

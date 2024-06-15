@@ -6,11 +6,13 @@ import com.mikayelovich.iot.control.webcontroller.model.dto.rest.EnablePinForDur
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.PinModeCommandRequestDto;
 import com.mikayelovich.iot.control.webcontroller.model.microcontrontroller.esp32.Esp32Devkit1Pin;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.Duration;
 import java.util.List;
 
 @AllArgsConstructor
+@Getter
 public class PinModeCommand extends StringExecutableCommand {
 
     private final static String PIN_MODE = "pinMode";
