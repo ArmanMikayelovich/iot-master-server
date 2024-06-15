@@ -1,4 +1,8 @@
 /*<![CDATA[*/
+const protocol = "https://"
+const ip = "192.168.1.115";
+const port = "8443"
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchDevices('devices-pin-mode');
     fetchDevices('devices-enable-pin');
@@ -14,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchDevices(dropdownId) {
     try {
-        const response = await fetch('http://localhost:8080/devices');
+        const response = await fetch(`${protocol}${ip}:${port}/devices`);
         const devices = await response.json();
         const devicesDropdown = document.getElementById(dropdownId);
 
@@ -63,7 +67,7 @@ async function sendPinModeCommand() {
     };
     console.log('Data to send:', JSON.stringify(data));
     try {
-        const response = await fetch('https://localhost:8443/execute/pin-mode/', {
+        const response = await fetch(`${protocol}${ip}:${port}/execute/pin-mode/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -92,7 +96,7 @@ async function sendEnablePinForDuration() {
     };
 
     try {
-        const response = await fetch('https://localhost:8443/execute/enable-pin-for-duration/', {
+        const response = await fetch(`${protocol}${ip}:${port}/execute/enable-pin-for-duration/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -121,7 +125,7 @@ async function sendDigitalWriteCommand() {
     };
 
     try {
-        const response = await fetch('https://localhost:8443/execute/digital-write/', {
+        const response = await fetch(`${protocol}${ip}:${port}/execute/digital-write/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -145,7 +149,7 @@ async function sendRestartDevice() {
     };
 
     try {
-        const response = await fetch('https://localhost:8443/execute/restart-device/', {
+        const response = await fetch(`${protocol}${ip}:${port}/execute/restart-device/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -177,7 +181,7 @@ async function convertReadableStreamToString(readableStream) {
 
 
 function fetchDevicePinInfo() {
-    fetch('https://localhost:8443/devices/pin-info')
+    fetch(`${protocol}${ip}:${port}/devices/pin-info`)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('pinInfoBody');
