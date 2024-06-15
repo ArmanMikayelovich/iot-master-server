@@ -28,7 +28,7 @@ async function fetchDevices(dropdownId) {
         });
         console.log('Devices fetched successfully:', devices);
     } catch (error) {
-        console.error('Error fetching devices:', error);
+       alert('Error fetching devices:' +  error);
     }
 }
 
@@ -63,7 +63,7 @@ async function sendPinModeCommand() {
     };
     console.log('Data to send:', JSON.stringify(data));
     try {
-        const response = await fetch('http://localhost:8080/execute/pin-mode/', {
+        const response = await fetch('https://localhost:8443/execute/pin-mode/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -76,7 +76,7 @@ async function sendPinModeCommand() {
             alert(`Error executing command. ${ await convertReadableStreamToString(response.body)}`);
         }
     } catch (error) {
-        console.error('Error:', error);
+       alert('Error:', await convertReadableStreamToString(error));
     }
 }
 
@@ -92,7 +92,7 @@ async function sendEnablePinForDuration() {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/execute/enable-pin-for-duration/', {
+        const response = await fetch('https://localhost:8443/execute/enable-pin-for-duration/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ async function sendEnablePinForDuration() {
             alert(`Error executing command. ${ await convertReadableStreamToString(response.body)}`);
         }
     } catch (error) {
-        console.error('Error:', error);
+       alert('Error:', await convertReadableStreamToString(error));
     }
 }
 
@@ -121,7 +121,7 @@ async function sendDigitalWriteCommand() {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/execute/digital-write/', {
+        const response = await fetch('https://localhost:8443/execute/digital-write/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -134,8 +134,7 @@ async function sendDigitalWriteCommand() {
             alert(`Error executing command. ${ await convertReadableStreamToString(response.body)}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-    }
+        alert('Error:', await convertReadableStreamToString(error));    }
 }
 
 async function sendRestartDevice() {
@@ -146,7 +145,7 @@ async function sendRestartDevice() {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/execute/restart-device/', {
+        const response = await fetch('https://localhost:8443/execute/restart-device/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -159,8 +158,7 @@ async function sendRestartDevice() {
             alert(`Error executing command. ${ await convertReadableStreamToString(response.body)}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-    }
+        alert('Error:', await convertReadableStreamToString(error));    }
 }
 
 async function convertReadableStreamToString(readableStream) {
@@ -179,7 +177,7 @@ async function convertReadableStreamToString(readableStream) {
 
 
 function fetchDevicePinInfo() {
-    fetch('http://localhost:8080/devices/pin-info')
+    fetch('https://localhost:8443/devices/pin-info')
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('pinInfoBody');
@@ -213,6 +211,6 @@ function fetchDevicePinInfo() {
             });
         })
         .catch(error => {
-            console.error('Error:', error);
+            alert('Error:',  convertReadableStreamToString(error));
         });
 }
