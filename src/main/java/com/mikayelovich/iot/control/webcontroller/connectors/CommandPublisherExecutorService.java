@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 @Component
 public class CommandPublisherExecutorService {
 
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     private final SocketConnectionPool socketConnectionPool;
 

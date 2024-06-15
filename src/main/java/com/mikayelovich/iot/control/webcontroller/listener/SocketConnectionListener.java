@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 public class SocketConnectionListener {
 
     private final SocketConnectionPool socketConnectionPool;
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private ServerSocket serverSocket;
     @Value("${server.socketlistener.port}")
@@ -33,20 +33,22 @@ public class SocketConnectionListener {
     @PostConstruct
     public void init() {
         try {
-            serverSocket = new ServerSocket(port);
-            log.info("Socket connection listener initialized");
-            while (true) {
-                Socket socket = serverSocket.accept();
-                executorService.submit(() -> {
+            executorService.submit(() -> {
+                serverSocket = new ServerSocket(port);
+                log.info("Socket connection listener initialized");
+                while (true) {
+                    Socket socket = serverSocket.accept();
+
                     try {
                         String s = socketConnectionPool.addConnection(socket);
                         log.info("connection successfully added, MAC address: {}", s);
                     } catch (Exception e) {
                         log.error("Error handling incoming connection", e);
                     }
-                });
-            }
-        } catch (IOException exception) {
+                }
+
+            });
+        } catch (Exception exception) {
             log.error("Error initializing server socket", exception);
             throw new ServerSockerInitException(exception.getMessage());
         }
