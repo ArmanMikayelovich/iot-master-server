@@ -1,14 +1,16 @@
 package com.mikayelovich.iot.control.webcontroller.model.dto.rest;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 
-@Getter
+import javax.validation.constraints.NotNull;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class ReadCommandRequestDTO extends RequestDTO {
-    private final int pinNumber;
-
-    public ReadCommandRequestDTO(String macAddress, int pinNumber) {
-        super(macAddress);
-        this.pinNumber = pinNumber;
-    }
+    @NotNull(message = "Pin Number is required")
+    private Integer pinNumber;
 }

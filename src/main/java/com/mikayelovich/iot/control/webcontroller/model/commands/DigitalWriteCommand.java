@@ -1,6 +1,7 @@
 package com.mikayelovich.iot.control.webcontroller.model.commands;
 
 import com.mikayelovich.iot.control.webcontroller.model.commands.abstraction.StringExecutableCommand;
+import com.mikayelovich.iot.control.webcontroller.model.commands.enums.DigitalWriteState;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.DigitalWriteCommandRequestDTO;
 import com.mikayelovich.iot.control.webcontroller.model.microcontrontroller.esp32.Esp32Devkit1Pin;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class DigitalWriteCommand extends StringExecutableCommand {
 
 
     public static DigitalWriteCommand fromDto(DigitalWriteCommandRequestDTO dto) {
-        return new DigitalWriteCommand(Esp32Devkit1Pin.fromPinNumber(dto.getPinNumber()), dto.getState());
+        DigitalWriteState digitalWriteState = DigitalWriteState.valueOf(dto.getState());
+        return new DigitalWriteCommand(Esp32Devkit1Pin.fromPinNumber(dto.getPinNumber()), digitalWriteState);
     }
 }

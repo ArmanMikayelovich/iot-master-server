@@ -2,11 +2,15 @@ package com.mikayelovich.iot.control.webcontroller.model.commands.abstraction;
 
 import com.mikayelovich.iot.control.webcontroller.model.commands.DigitalWriteCommand;
 import com.mikayelovich.iot.control.webcontroller.model.commands.EnablePinForDuration;
+import com.mikayelovich.iot.control.webcontroller.model.commands.PinModeCommand;
 import com.mikayelovich.iot.control.webcontroller.model.commands.ReadCommand;
+import com.mikayelovich.iot.control.webcontroller.model.commands.RestartCommand;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.DigitalWriteCommandRequestDTO;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.EnablePinForDurationRequestDTO;
+import com.mikayelovich.iot.control.webcontroller.model.dto.rest.PinModeCommandRequestDto;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.ReadCommandRequestDTO;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.RequestDTO;
+import com.mikayelovich.iot.control.webcontroller.model.dto.rest.RestartCommandRequestDto;
 
 import java.util.List;
 
@@ -26,6 +30,7 @@ public abstract class StringExecutableCommand implements Command<String> {
 
     protected abstract List<String> getParameters();
 
+    //todo move to separate mapper
     public static StringExecutableCommand fromDto(RequestDTO dto) {
         if (dto instanceof DigitalWriteCommandRequestDTO) {
             return DigitalWriteCommand.fromDto((DigitalWriteCommandRequestDTO) dto);
@@ -33,6 +38,10 @@ public abstract class StringExecutableCommand implements Command<String> {
             return ReadCommand.fromDto((ReadCommandRequestDTO) dto);
         } else if (dto instanceof EnablePinForDurationRequestDTO) {
             return EnablePinForDuration.fromDto((EnablePinForDurationRequestDTO) dto);
+        } else if (dto instanceof PinModeCommandRequestDto) {
+            return PinModeCommand.fromDto((PinModeCommandRequestDto) dto);
+        } else if (dto instanceof RestartCommandRequestDto) {
+            return RestartCommand.fromDto((RestartCommandRequestDto) dto);
         } else {
             throw new IllegalArgumentException("no appropriate class for DTO to map");
         }

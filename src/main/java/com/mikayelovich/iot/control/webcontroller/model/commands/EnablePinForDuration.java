@@ -1,5 +1,7 @@
 package com.mikayelovich.iot.control.webcontroller.model.commands;
 
+import com.mikayelovich.iot.control.webcontroller.model.commands.abstraction.StringExecutableCommand;
+import com.mikayelovich.iot.control.webcontroller.model.commands.enums.DigitalWriteState;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.EnablePinForDurationRequestDTO;
 import com.mikayelovich.iot.control.webcontroller.model.microcontrontroller.esp32.Esp32Devkit1Pin;
 
@@ -7,14 +9,16 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnablePinForDuration extends DigitalWriteCommand {
+public class EnablePinForDuration extends StringExecutableCommand {
     private final static String ENABLE_PIN_FOR = "enablePinFor";
+
+    private final Esp32Devkit1Pin pinNumber;
 
     private final long durationInSeconds;
 
 
     public EnablePinForDuration(Esp32Devkit1Pin pinNumber, Duration duration) {
-        super(pinNumber, DigitalWriteState.HIGH);
+        this.pinNumber = pinNumber;
         this.durationInSeconds = duration.toSeconds();
     }
 
@@ -25,9 +29,7 @@ public class EnablePinForDuration extends DigitalWriteCommand {
 
     @Override
     protected List<String> getParameters() {
-        ArrayList<String> params = new ArrayList<>(super.getParameters());
-        params.add(String.valueOf(durationInSeconds));
-        return params;
+        return List.of(String.valueOf(pinNumber), String.valueOf(durationInSeconds));
     }
 
     public static EnablePinForDuration fromDto(EnablePinForDurationRequestDTO dto) {

@@ -1,4 +1,4 @@
-package com.mikayelovich.iot.control.webcontroller.rest;
+package com.mikayelovich.iot.control.webcontroller.webcontrollers.rest;
 
 import com.mikayelovich.iot.control.webcontroller.connectors.SocketBasedStringCommandPublisher;
 import com.mikayelovich.iot.control.webcontroller.listener.SocketConnectionPool;

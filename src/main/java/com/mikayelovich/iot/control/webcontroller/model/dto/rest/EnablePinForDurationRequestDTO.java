@@ -1,15 +1,18 @@
 package com.mikayelovich.iot.control.webcontroller.model.dto.rest;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
+import javax.validation.constraints.NotNull;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+
 public class EnablePinForDurationRequestDTO extends RequestDTO {
-    private final  int pinNumber;
-    private final long durationInSeconds;
 
-    public EnablePinForDurationRequestDTO(String macAddress, int pinNumber, long durationInSeconds) {
-        super(macAddress);
-        this.pinNumber = pinNumber;
-        this.durationInSeconds = durationInSeconds;
-    }
+    @NotNull(message = "Pin Number is required")
+    private Integer pinNumber;
+
+    @NotNull(message = "duration in seconds is required")
+    private Long durationInSeconds;
 }
