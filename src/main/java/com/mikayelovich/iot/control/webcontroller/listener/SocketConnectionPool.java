@@ -1,7 +1,7 @@
 package com.mikayelovich.iot.control.webcontroller.listener;
 
-import com.mikayelovich.iot.control.webcontroller.connectors.DevicePinStateHolder;
-import com.mikayelovich.iot.control.webcontroller.connectors.SocketBasedStringCommandPublisher;
+import com.mikayelovich.iot.control.webcontroller.connectors.sockets.DevicePinStateHolder;
+import com.mikayelovich.iot.control.webcontroller.connectors.sockets.SocketBasedStringCommandPublisher;
 import com.mikayelovich.iot.control.webcontroller.model.commands.enums.PinModeState;
 import com.mikayelovich.iot.control.webcontroller.model.microcontrontroller.esp32.Esp32Devkit1Pin;
 import lombok.extern.slf4j.Slf4j;

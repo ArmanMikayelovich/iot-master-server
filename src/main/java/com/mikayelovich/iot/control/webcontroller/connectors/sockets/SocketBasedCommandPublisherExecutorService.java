@@ -1,4 +1,4 @@
-package com.mikayelovich.iot.control.webcontroller.connectors;
+package com.mikayelovich.iot.control.webcontroller.connectors.sockets;
 
 import com.mikayelovich.iot.control.webcontroller.listener.SocketConnectionPool;
 import com.mikayelovich.iot.control.webcontroller.model.commands.abstraction.StringExecutableCommand;
@@ -13,19 +13,19 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 @Component
-public class CommandPublisherExecutorService {
+public class SocketBasedCommandPublisherExecutorService {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     private final SocketConnectionPool socketConnectionPool;
 
     /**
-     * Constructs a new CommandPublisherExecutorService with the specified SocketConnectionPool.
+     * Constructs a new SocketBasedCommandPublisherExecutorService with the specified SocketConnectionPool.
      *
      * @param socketConnectionPool the SocketConnectionPool to use for retrieving SocketBasedStringCommandPublishers
      */
     @Autowired
-    public CommandPublisherExecutorService(SocketConnectionPool socketConnectionPool) {
+    public SocketBasedCommandPublisherExecutorService(SocketConnectionPool socketConnectionPool) {
         this.socketConnectionPool = socketConnectionPool;
     }
 
@@ -36,17 +36,17 @@ public class CommandPublisherExecutorService {
      */
     public void executeCommand(RequestDTO requestDTO) {
         Runnable run = () -> {
-            Optional<SocketBasedStringCommandPublisher> commandPublisherOptional = socketConnectionPool.getByMacId(requestDTO.getMacAddress());
+            Optional<SocketBasedStringCommandPublisher> commandPublisherOptional = socketConnectionPool.getByMacId(requestDTO.getUniqueDeviceId());
             if (commandPublisherOptional.isPresent()) {
                 StringExecutableCommand stringExecutableCommand = StringExecutableCommand.fromDto(requestDTO);
                 SocketBasedStringCommandPublisher socketBasedStringCommandPublisher = commandPublisherOptional.get();
                 socketBasedStringCommandPublisher.sendCommand(stringExecutableCommand);
-                log.debug("Command '{}' sent to device with MAC address: {}", stringExecutableCommand.mapToExecutable(), requestDTO.getMacAddress());
+                log.debug("Command '{}' sent to device with MAC address: {}", stringExecutableCommand.mapToExecutable(), requestDTO.getUniqueDeviceId());
             } else {
-                log.warn("No connection found for device with MAC address: {}", requestDTO.getMacAddress());
+                log.warn("No connection found for device with MAC address: {}", requestDTO.getUniqueDeviceId());
             }
         };
         executorService.execute(run);
-        log.debug("Command execution scheduled for device with MAC address: {}", requestDTO.getMacAddress());
+        log.debug("Command execution scheduled for device with MAC address: {}", requestDTO.getUniqueDeviceId());
     }
 }

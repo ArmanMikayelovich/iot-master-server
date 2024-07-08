@@ -1,4 +1,4 @@
-package com.mikayelovich.iot.control.webcontroller.connectors;
+package com.mikayelovich.iot.control.webcontroller.connectors.sockets;
 
 import com.mikayelovich.iot.control.webcontroller.model.commands.PinModeCommand;
 import com.mikayelovich.iot.control.webcontroller.model.commands.enums.PinModeState;

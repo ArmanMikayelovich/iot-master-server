@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class RequestDTO {
-    @NotNull(message = "mac address is required")
-    private String macAddress;
+    //unique device id can be mac address of the device, or mqtt broker, which that device listens
+    @NotNull(message = "unique id  is required")
+    private String uniqueDeviceId;
 }

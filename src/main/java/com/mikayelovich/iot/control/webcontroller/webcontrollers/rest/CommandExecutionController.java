@@ -1,6 +1,6 @@
 package com.mikayelovich.iot.control.webcontroller.webcontrollers.rest;
 
-import com.mikayelovich.iot.control.webcontroller.connectors.CommandPublisherExecutorService;
+import com.mikayelovich.iot.control.webcontroller.connectors.sockets.SocketBasedCommandPublisherExecutorService;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.DigitalWriteCommandRequestDTO;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.EnablePinForDurationRequestDTO;
 import com.mikayelovich.iot.control.webcontroller.model.dto.rest.PinModeCommandRequestDto;
@@ -18,31 +18,31 @@ import javax.validation.Valid;
 @RequestMapping("/execute")
 public class CommandExecutionController {
 
-    private final CommandPublisherExecutorService commandPublisherExecutorService;
+    private final SocketBasedCommandPublisherExecutorService socketBasedCommandPublisherExecutorService;
 
     @Autowired
-    public CommandExecutionController(CommandPublisherExecutorService commandPublisherExecutorService) {
-        this.commandPublisherExecutorService = commandPublisherExecutorService;
+    public CommandExecutionController(SocketBasedCommandPublisherExecutorService socketBasedCommandPublisherExecutorService) {
+        this.socketBasedCommandPublisherExecutorService = socketBasedCommandPublisherExecutorService;
     }
 
     @PostMapping(value = "/digital-write/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void digitalWrite(@Valid @RequestBody DigitalWriteCommandRequestDTO dto) {
-        commandPublisherExecutorService.executeCommand(dto);
+        socketBasedCommandPublisherExecutorService.executeCommand(dto);
     }
 
     @PostMapping(value = "/enable-pin-for-duration/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void digitalWrite(@Valid @RequestBody EnablePinForDurationRequestDTO dto) {
-        commandPublisherExecutorService.executeCommand(dto);
+        socketBasedCommandPublisherExecutorService.executeCommand(dto);
     }
 
     @PostMapping(value = "/pin-mode/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void digitalWrite(@Valid @RequestBody PinModeCommandRequestDto dto) {
-        commandPublisherExecutorService.executeCommand(dto);
+        socketBasedCommandPublisherExecutorService.executeCommand(dto);
     }
 
     @PostMapping(value = "/restart-device/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void restart(@Valid @RequestBody RestartCommandRequestDto dto) {
-        commandPublisherExecutorService.executeCommand(dto);
+        socketBasedCommandPublisherExecutorService.executeCommand(dto);
     }
 
     //todo read command...

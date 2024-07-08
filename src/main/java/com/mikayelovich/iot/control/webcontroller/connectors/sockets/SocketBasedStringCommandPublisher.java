@@ -1,5 +1,6 @@
-package com.mikayelovich.iot.control.webcontroller.connectors;
+package com.mikayelovich.iot.control.webcontroller.connectors.sockets;
 
+import com.mikayelovich.iot.control.webcontroller.connectors.CommandPublisher;
 import com.mikayelovich.iot.control.webcontroller.exceptions.SocketClosedException;
 import com.mikayelovich.iot.control.webcontroller.exceptions.SocketStreamInitializationException;
 import com.mikayelovich.iot.control.webcontroller.model.commands.PinModeCommand;

@@ -1,6 +1,6 @@
 package com.mikayelovich.iot.control.webcontroller.webcontrollers.rest;
 
-import com.mikayelovich.iot.control.webcontroller.connectors.SocketBasedStringCommandPublisher;
+import com.mikayelovich.iot.control.webcontroller.connectors.sockets.SocketBasedStringCommandPublisher;
 import com.mikayelovich.iot.control.webcontroller.listener.SocketConnectionPool;
 import com.mikayelovich.iot.control.webcontroller.model.commands.enums.PinModeState;
 import com.mikayelovich.iot.control.webcontroller.model.microcontrontroller.esp32.Esp32Devkit1Pin;
