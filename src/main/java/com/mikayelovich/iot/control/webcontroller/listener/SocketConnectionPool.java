@@ -2,8 +2,8 @@ package com.mikayelovich.iot.control.webcontroller.listener;
 
 import com.mikayelovich.iot.control.webcontroller.connectors.sockets.DevicePinStateHolder;
 import com.mikayelovich.iot.control.webcontroller.connectors.sockets.SocketBasedStringCommandPublisher;
-import com.mikayelovich.iot.control.webcontroller.model.commands.enums.PinModeState;
-import com.mikayelovich.iot.control.webcontroller.model.microcontrontroller.esp32.Esp32Devkit1Pin;
+import com.mikayelovich.iot.control.model.commands.enums.PinModeState;
+import com.mikayelovich.iot.control.model.microcontrontroller.esp32.Esp32Devkit1Pin;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class SocketConnectionPool {
     }
 
 
-    public Map<String, List<Pair<Esp32Devkit1Pin, PinModeState>>> getPinsInfo() {
+    public Map<String, List<Pair<Integer, PinModeState>>> getPinsInfo() {
         return devicePinStateHolder.getAllDevicePinStates();
     }
 

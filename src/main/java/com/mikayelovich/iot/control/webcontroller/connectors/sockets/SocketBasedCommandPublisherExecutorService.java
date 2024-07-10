@@ -1,8 +1,8 @@
 package com.mikayelovich.iot.control.webcontroller.connectors.sockets;
 
 import com.mikayelovich.iot.control.webcontroller.listener.SocketConnectionPool;
-import com.mikayelovich.iot.control.webcontroller.model.commands.abstraction.StringExecutableCommand;
-import com.mikayelovich.iot.control.webcontroller.model.dto.rest.RequestDTO;
+import com.mikayelovich.iot.control.model.commands.abstraction.StringExecutableCommand;
+import com.mikayelovich.iot.control.model.dto.rest.RequestDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

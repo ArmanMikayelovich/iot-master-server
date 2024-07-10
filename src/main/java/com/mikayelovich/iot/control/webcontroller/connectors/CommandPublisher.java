@@ -1,6 +1,6 @@
 package com.mikayelovich.iot.control.webcontroller.connectors;
 
-import com.mikayelovich.iot.control.webcontroller.model.commands.abstraction.Command;
+import com.mikayelovich.iot.control.model.commands.abstraction.Command;
 
 import java.io.Closeable;
 
