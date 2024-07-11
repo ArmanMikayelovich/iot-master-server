@@ -1,7 +1,7 @@
 package com.mikayelovich.iot.control.mqttcontroler.connectors.mqtt;
 
-import com.mikayelovich.iot.control.webcontroller.connectors.CommandPublisher;
 import com.mikayelovich.iot.control.model.commands.abstraction.Command;
+import com.mikayelovich.iot.control.webcontroller.connectors.CommandPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -54,8 +54,8 @@ public class MQTTMessagePublisher implements CommandPublisher<String> {
 
             System.out.println("Connected");
 
-            String content = command.mapToExecutable();  // Message content
-            String topic = "topic";  // Replace with your topic
+            String content = command.mapToExecutable();
+            String topic = command.getUniqueId();
 
             MqttMessage message = new MqttMessage(content.getBytes());
             message.setQos(QOS);

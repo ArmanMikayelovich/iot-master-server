@@ -2,20 +2,22 @@ package com.mikayelovich.iot.control.model.commands.abstraction;
 
 import com.mikayelovich.iot.control.model.commands.DigitalWriteCommand;
 import com.mikayelovich.iot.control.model.commands.EnablePinForDuration;
+import com.mikayelovich.iot.control.model.commands.PinModeCommand;
 import com.mikayelovich.iot.control.model.commands.ReadCommand;
 import com.mikayelovich.iot.control.model.commands.RestartCommand;
-import com.mikayelovich.iot.control.model.commands.PinModeCommand;
 import com.mikayelovich.iot.control.model.dto.rest.DigitalWriteCommandRequestDTO;
 import com.mikayelovich.iot.control.model.dto.rest.EnablePinForDurationRequestDTO;
 import com.mikayelovich.iot.control.model.dto.rest.PinModeCommandRequestDto;
 import com.mikayelovich.iot.control.model.dto.rest.ReadCommandRequestDTO;
 import com.mikayelovich.iot.control.model.dto.rest.RequestDTO;
 import com.mikayelovich.iot.control.model.dto.rest.RestartCommandRequestDto;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 public abstract class StringExecutableCommand implements Command<String> {
-
+    private @Getter @Setter String uniqueId;
     public final String toString() {
         String methodParams = String.join(",", getParameters());
         return String.format("%s(%s)", getCommandName(), methodParams);

@@ -2,7 +2,6 @@ package com.mikayelovich.iot.control.model.commands;
 
 import com.mikayelovich.iot.control.model.commands.abstraction.StringExecutableCommand;
 import com.mikayelovich.iot.control.model.dto.rest.EnablePinForDurationRequestDTO;
-import com.mikayelovich.iot.control.model.microcontrontroller.esp32.Esp32Devkit1Pin;
 
 import java.time.Duration;
 import java.util.List;
