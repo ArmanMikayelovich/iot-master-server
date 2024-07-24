@@ -1,19 +1,14 @@
 package com.mikayelovich.iot.control;
 
-import com.mikayelovich.iot.control.mqttcontroler.connectors.mqtt.MQTTMessagePublisher;
-import com.mikayelovich.iot.control.model.commands.EnablePinForDuration;
-import com.mikayelovich.iot.control.model.microcontrontroller.esp32.Esp32Devkit1Pin;
+import com.mikayelovich.iot.control.mqttcontroler.publisher.MQTTMessagePublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.time.Duration;
-
 @Slf4j
 @SpringBootApplication
-public class IotWebControlApplication implements CommandLineRunner {
+public class IotWebControlApplication{
 
     @Autowired
     private MQTTMessagePublisher publisher;
@@ -22,9 +17,4 @@ public class IotWebControlApplication implements CommandLineRunner {
         SpringApplication.run(IotWebControlApplication.class, args);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        EnablePinForDuration enablePinForDuration = new EnablePinForDuration(2, Duration.ofSeconds(3));
-        publisher.sendCommand(enablePinForDuration);
-    }
 }

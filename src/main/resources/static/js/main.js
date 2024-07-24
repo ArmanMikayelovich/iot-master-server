@@ -180,8 +180,8 @@ async function convertReadableStreamToString(readableStream) {
 }
 
 
-function fetchDevicePinInfo() {
-    fetch(`${protocol}${ip}:${port}/devices/pin-info`)
+function fetchDevicePinInfo(uniqueId) {
+    fetch(`${protocol}${ip}:${port}/devices/pin-info?${uniqueId}`)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('pinInfoBody');

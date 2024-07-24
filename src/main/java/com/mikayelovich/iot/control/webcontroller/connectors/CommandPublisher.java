@@ -6,8 +6,6 @@ import java.io.Closeable;
 
 public interface CommandPublisher<T> extends Closeable {
 
-    boolean isActive();
-
     void sendCommand(Command<T> command);
 
 }
