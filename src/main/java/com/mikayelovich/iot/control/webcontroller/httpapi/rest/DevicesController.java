@@ -32,7 +32,7 @@ public class DevicesController {
     }
 
     @GetMapping(value = "/pin-info", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<Pair<Integer, PinModeState>>> getPinInfo(@RequestParam String uniqueId) {
+    public Map<String, List<Pair<Integer, PinModeState>>> getPinInfo(@RequestParam(required = false) String uniqueId) {
     //TODO create a new command for esp systems, to check their state of pins, and send into back as
         return new HashMap<>();
     }

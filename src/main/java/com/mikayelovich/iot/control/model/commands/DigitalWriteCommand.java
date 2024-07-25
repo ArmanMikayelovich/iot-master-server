@@ -3,7 +3,6 @@ package com.mikayelovich.iot.control.model.commands;
 import com.mikayelovich.iot.control.model.commands.abstraction.StringExecutableCommand;
 import com.mikayelovich.iot.control.model.commands.enums.DigitalWriteState;
 import com.mikayelovich.iot.control.model.dto.rest.DigitalWriteCommandRequestDTO;
-import com.mikayelovich.iot.control.model.microcontrontroller.esp32.Esp32Devkit1Pin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class DigitalWriteCommand extends StringExecutableCommand {
     private final static String DIGITAL_WRITE = "digitalWrite";
 
-    private final Integer pinNumber;
+    private final Integer pin;
     private final DigitalWriteState state;
 
     @Override
@@ -24,7 +23,7 @@ public class DigitalWriteCommand extends StringExecutableCommand {
 
     @Override
     protected List<String> getParameters() {
-        return List.of(String.valueOf(pinNumber), String.valueOf(state));
+        return List.of(String.valueOf(pin), String.valueOf(state));
     }
 
 

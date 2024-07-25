@@ -1,5 +1,6 @@
 package com.mikayelovich.iot.control.mqttcontroler.listener;
 
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
+@Slf4j
 public class MqttListener {
 
     private static final int MAX_RECONNECT_ATTEMPTS = 5;
@@ -38,6 +40,7 @@ public class MqttListener {
 
     private MqttClient client;
 
+
     @PostConstruct
     public void init() {
         try {
@@ -51,27 +54,29 @@ public class MqttListener {
             client.setCallback(new MqttCallback() {
                 @Override
                 public void connectionLost(Throwable cause) {
-                    System.err.println("Connection lost: " + cause.getMessage());
+                    log.error("Connection lost: {}", cause.getMessage());
                     handleReconnection(options);
                 }
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) {
                     String payload = new String(message.getPayload());
-                    System.out.println("Received message: " + payload + " from topic: " + topic);
+                    log.info("Received message: {} from topic: {}", payload, topic);
                     mqttMessageHandlerService.handleMessage(topic, payload);
                 }
 
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken token) {
+                    log.debug("Delivery complete for token: {}", token.getMessageId());
                 }
             });
 
             client.connect(options);
             client.subscribe(registrationTopic);
+            log.info("Connected to MQTT broker at {}", brokerUri);
 
         } catch (MqttException e) {
-            System.err.println("Error initializing MQTT client: " + e.getMessage());
+            log.error("Error initializing MQTT client: {}", e.getMessage(), e);
         }
     }
 
@@ -82,13 +87,13 @@ public class MqttListener {
                 Thread.sleep(BASE_RECONNECT_DELAY_MS * (1 << attempt)); // Exponential backoff
                 client.connect(options);
                 client.subscribe(registrationTopic);
-                System.out.println("Reconnected to broker");
+                log.info("Reconnected to broker");
                 return;
             } catch (MqttException | InterruptedException e) {
                 attempt++;
-                System.err.println("Reconnection attempt " + attempt + " failed: " + e.getMessage());
+                log.error("Reconnection attempt {} failed: {}", attempt, e.getMessage(), e);
                 if (attempt >= MAX_RECONNECT_ATTEMPTS) {
-                    System.err.println("Max reconnection attempts reached. Giving up.");
+                    log.error("Max reconnection attempts reached. Giving up.");
                 }
             }
         }

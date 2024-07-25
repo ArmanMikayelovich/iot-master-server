@@ -2,7 +2,6 @@ package com.mikayelovich.iot.control.model.commands;
 
 import com.mikayelovich.iot.control.model.commands.abstraction.StringExecutableCommand;
 import com.mikayelovich.iot.control.model.dto.rest.ReadCommandRequestDTO;
-import com.mikayelovich.iot.control.model.microcontrontroller.esp32.Esp32Devkit1Pin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class ReadCommand extends StringExecutableCommand {
     private final static String DIGITAL_READ = "digitalRead";
 
-    private final Integer pinNumber;
+    private final Integer pin;
 
 
     @Override
@@ -23,7 +22,7 @@ public class ReadCommand extends StringExecutableCommand {
 
     @Override
     protected List<String> getParameters() {
-        return List.of(String.valueOf(pinNumber));
+        return List.of(String.valueOf(pin));
     }
 
 

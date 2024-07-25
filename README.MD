@@ -96,7 +96,7 @@ server.ssl.key-store-password=123456
 server.ssl.keyStoreType=PKCS12
 server.ssl.keyAlias=mycert
 
-server.ip-address=192.168.1.115
+server.ip-address=192.168.1.101
 ```
 
 ## Front-End

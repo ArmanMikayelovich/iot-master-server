@@ -1,6 +1,6 @@
 /*<![CDATA[*/
 const protocol = "https://"
-const ip = "192.168.1.115";
+const ip = "192.168.1.101";
 const port = "8443"
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,17 +52,17 @@ function populatePinNumbers(dropdownId) {
 }
 
 async function sendPinModeCommand() {
-    const macAddress = document.getElementById('devices-pin-mode').value;
-    const pinNumber = document.getElementById('pinNumber-pin-mode').value;
+    const uniqueId = document.getElementById('devices-pin-mode').value;
+    const pin = document.getElementById('pinNumber-pin-mode').value;
     const pinModeState = document.getElementById('pinModeState-pin-mode').value;
     console.log('Sending Pin Mode Command:');
-    console.log('Mac Address:', macAddress);
-    console.log('Pin Number:', pinNumber);
+    console.log('UniqueId:', uniqueId);
+    console.log('Pin Number:', pin);
     console.log('Pin Mode State:', pinModeState);
 
     const data = {
-        macAddress: macAddress,
-        pinNumber: parseInt(pinNumber),
+        uniqueId: uniqueId,
+        pin: parseInt(pin),
         pinModeState: pinModeState
     };
     console.log('Data to send:', JSON.stringify(data));
@@ -85,13 +85,13 @@ async function sendPinModeCommand() {
 }
 
 async function sendEnablePinForDuration() {
-    const macAddress = document.getElementById('devices-enable-pin').value;
-    const pinNumber = document.getElementById('pinNumber-enable-pin').value;
+    const uniqueId = document.getElementById('devices-enable-pin').value;
+    const pin = document.getElementById('pinNumber-enable-pin').value;
     const duration = document.getElementById('duration-enable-pin').value;
 
     const data = {
-        macAddress: macAddress,
-        pinNumber: parseInt(pinNumber),
+        uniqueId: uniqueId,
+        pin: parseInt(pin),
         durationInSeconds: parseInt(duration)
     };
 
@@ -114,13 +114,13 @@ async function sendEnablePinForDuration() {
 }
 
 async function sendDigitalWriteCommand() {
-    const macAddress = document.getElementById('devices-digital-write').value;
-    const pinNumber = document.getElementById('pinNumber-digital-write').value;
+    const uniqueId = document.getElementById('devices-digital-write').value;
+    const pin = document.getElementById('pinNumber-digital-write').value;
     const state = document.getElementById('state-digital-write').value;
 
     const data = {
-        macAddress: macAddress,
-        pinNumber: parseInt(pinNumber),
+        uniqueId: uniqueId,
+        pin: parseInt(pin),
         state: state
     };
 
@@ -142,10 +142,10 @@ async function sendDigitalWriteCommand() {
 }
 
 async function sendRestartDevice() {
-    const macAddress = document.getElementById('devices-restart-device').value;
+    const uniqueId = document.getElementById('devices-restart-device').value;
 
     const data = {
-        macAddress: macAddress,
+        uniqueId: uniqueId,
     };
 
     try {
@@ -166,17 +166,20 @@ async function sendRestartDevice() {
 }
 
 async function convertReadableStreamToString(readableStream) {
-    const reader = readableStream.getReader();
-    const decoder = new TextDecoder();
-    let result = '';
-    while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-            break;
+    if(readableStream){
+        const reader = readableStream.getReader();
+
+        const decoder = new TextDecoder();
+        let result = '';
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) {
+                break;
+            }
+            result += decoder.decode(value, { stream: true });
         }
-        result += decoder.decode(value, { stream: true });
+        return result;
     }
-    return result;
 }
 
 
@@ -187,12 +190,12 @@ function fetchDevicePinInfo(uniqueId) {
             const tableBody = document.getElementById('pinInfoBody');
             tableBody.innerHTML = '';
 
-            Object.keys(data).forEach(macAddress => {
-                const pins = data[macAddress];
+            Object.keys(data).forEach(uniqueId => {
+                const pins = data[uniqueId];
                 const row = document.createElement('tr');
-                const macAddressCell = document.createElement('td');
-                macAddressCell.textContent = macAddress;
-                row.appendChild(macAddressCell);
+                const uniqueIdCell = document.createElement('td');
+                uniqueIdCell.textContent = uniqueId;
+                row.appendChild(uniqueIdCell);
 
                 const pinsCell = document.createElement('td');
                 const pinsTable = document.createElement('table');

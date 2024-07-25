@@ -9,13 +9,13 @@ import java.util.List;
 public class EnablePinForDuration extends StringExecutableCommand {
     private final static String ENABLE_PIN_FOR = "enablePinFor";
 
-    private final Integer pinNumber;
+    private final Integer pin;
 
     private final long durationInSeconds;
 
 
-    public EnablePinForDuration(Integer pinNumber, Duration duration) {
-        this.pinNumber = pinNumber;
+    public EnablePinForDuration(Integer pin, Duration duration) {
+        this.pin = pin;
         this.durationInSeconds = duration.toSeconds();
     }
 
@@ -26,7 +26,7 @@ public class EnablePinForDuration extends StringExecutableCommand {
 
     @Override
     protected List<String> getParameters() {
-        return List.of(String.valueOf(pinNumber), String.valueOf(durationInSeconds));
+        return List.of(String.valueOf(pin), String.valueOf(durationInSeconds));
     }
 
     public static EnablePinForDuration fromDto(EnablePinForDurationRequestDTO dto) {

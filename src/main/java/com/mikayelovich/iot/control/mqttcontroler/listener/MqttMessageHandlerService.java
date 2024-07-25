@@ -2,6 +2,7 @@ package com.mikayelovich.iot.control.mqttcontroler.listener;
 
 import com.mikayelovich.iot.control.mqttcontroler.StateMachine;
 import com.mikayelovich.iot.control.mqttcontroler.events.MqttReceivedEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@Slf4j
 public class MqttMessageHandlerService {
 
     @Autowired
@@ -28,7 +30,7 @@ public class MqttMessageHandlerService {
     private String lastHandledMessage;
 
     public void handleMessage(String topic, String payload) {
-        System.out.println("Handling message from topic: " + topic + " with payload: " + payload);
+        log.info("Handling message from topic: {} with payload: {}", topic, payload);
         lastHandledMessage = payload;
         Matcher matcher = pattern.matcher(payload);
         if (matcher.find()) {
@@ -36,21 +38,21 @@ public class MqttMessageHandlerService {
             String publishedEventId = matcher.group(2);
             String answerData = matcher.group(3);
 
-            System.out.println("Topic: " + topic);
-            System.out.println("Published Event ID: " + publishedEventId);
-            System.out.println("Answer Data: " + answerData);
+            log.info("Event Topic: {}", eventTopic);
+            log.info("Published Event ID: {}", publishedEventId);
+            log.info("Answer Data: {}", answerData);
 
             addMqttEventIntoStateMachine(eventTopic, publishedEventId, answerData);
         } else {
-            System.out.println("No match found.");
+            log.warn("No match found in payload: {}", payload);
         }
     }
 
     private void addMqttEventIntoStateMachine(String eventTopic, String publishedEventId, String answerData) {
         MqttReceivedEvent mqttReceivedEvent = new MqttReceivedEvent(publishedEventId, answerData);
         stateMachine.registerEvent(eventTopic, mqttReceivedEvent);
+        log.info("Event registered into state machine: {} -> {}", eventTopic, mqttReceivedEvent);
     }
-
     public String getLastHandledMessage() {
         return lastHandledMessage;
     }
